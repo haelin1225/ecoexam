@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Faq">
+	<typeAlias alias="faq" type="kr.co.eco.vo.FaqVO"/>
+	
+	<resultMap id="faqResult" class="faq">
+		<result property="faqNo" column="FAQNO" />
+		<result property="faqTitle" column="FAQTITLE" />
+		<result property="faqContent" column="FAQCONTENT"/>
+		<result property="faqCreateDate" column="FAQCREATEDATE" nullValue="" />
+		<result property="faqCount" column="FAQCOUNT" nullValue="" />
+		<result property="category" column="CATEGORY" nullValue="" />
+		<result property="boardNo" column="BOARDNO"  />
+	</resultMap>
+
+	<select id ="getFaqList" resultMap="faqResult" parameterClass="java.lang.Integer">
+		select * from FAQ
+		ORDER BY FAQNO
+	</select>
+	
+	<select id ="getFaqListByCategory" resultMap="faqResult" parameterClass="java.util.HashMap">
+		select * from FAQ
+		WHERE CATEGORY=#category# AND FAQTITLE LIKE '%' || #faqTitle# || '%'
+		ORDER BY FAQNO
+	</select>
+	
+	<select id ="getFaq" resultMap="faqResult" parameterClass="java.lang.Integer">
+		select * from FAQ
+		WHERE FAQNO = #faqNo#
+	</select>
+	
+	<update id="addFaq" parameterClass="faq">
+		INSERT INTO FAQ
+		VALUES(seq_faq.NEXTVAL, #faqTitle#, #faqContent#, SYSDATE, #faqCount#, #category#, #boardNo#) 
+	</update>
+
+	<delete id="deleteFaq" parameterClass="java.lang.Integer">
+		delete FROM FAQ where FAQNO=#faqNo#
+	</delete>
+	
+	<update id="updateFaq" parameterClass="faq">
+		update FAQ
+		set FAQTITLE = #faqTitle#, FAQCONTENT = #faqContent#, CATEGORY=#category#
+		where FAQNO=#faqNo#
+	</update>
+		
+	<update id="updateFaqCount" parameterClass="faq">
+		update FAQ
+		set FAQCOUNT = #faqCount#
+		where FAQNO=#faqNo#
+	</update>
+</sqlMap>
+

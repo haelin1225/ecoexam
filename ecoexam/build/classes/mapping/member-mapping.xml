@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Member">
+<typeAlias alias="member" type="kr.co.eco.vo.MemberVO"/>
+	
+	<resultMap id="memberResult" class="member">
+		<result property="memberID" column="MEMBERID" nullValue=""/>
+		<result property="memberPW" column="MEMBERPW" nullValue=""/>
+		<result property="memberEmail" column="MEMBEREMAIL" nullValue=""/>
+		<result property="memberCreateDate" column="MEMBERCREATEDATE"/>
+	</resultMap>
+	<resultMap id="memberList" class="member">
+		<result property="memberID" column="MEMBERID" nullValue=""/>
+		<result property="memberEmail" column="MEMBEREMAIL" nullValue=""/>
+		<result property="memberCreateDate" column="MEMBERCREATEDATE"/>
+	</resultMap>
+	
+	<insert id="insertMember" parameterClass="member">
+		INSERT INTO MEMBER(MEMBERID,MEMBERPW,MEMBEREMAIL,MEMBERCREATEDATE)
+		VALUES(#memberID#,#memberPW#,#memberEmail#,SYSDATE)  
+	</insert> 
+	
+ 	<update id="updateMember" parameterClass="member">
+		UPDATE MEMBER
+		SET MEMBERPW=#memberPW#,MEMBEREMAIL=#memberEmail#
+		WHERE MEMBERID=#memberID#
+	</update> 
+	
+	<delete id="deleteMember" parameterClass="java.lang.String">
+		delete MEMBER
+		where MEMBERID=#memberID#
+	</delete>
+	
+	<select id ="getMember" resultMap="memberResult" parameterClass="java.lang.String">
+		select *
+		from MEMBER
+		WHERE MEMBERID = #memberID#
+	</select>
+	
+	<select id="memberList" resultMap="memberList" >
+		SELECT MEMBERID,MEMBEREMAIL,MEMBERCREATEDATE
+		FROM MEMBER
+	</select>
+	
+</sqlMap>
+	
+	<!-- <select id ="getAttachFileList" resultMap="attachFileResult" parameterClass="java.lang.Integer">
+		select *
+		from ATTACHFILE
+		WHERE POSTNO = #postNo#
+	</select>
+	
+	<update id="addAttachFile" parameterClass="attachFile">
+		INSERT INTO ATTACHFILE(FILENO,POSTNO,FILENAME)
+		VALUES(seq_file.NEXTVAL,#postNo#,#fileName#) 
+	</update>
+
+	<delete id="deleteAttachFile" parameterClass="java.lang.Integer">
+		delete ATTACHFILE where FILENO=#fileNo#
+	</delete>
+	
+	<update id="updateAttachFile" parameterClass="attachFile">
+		update ATTACHFILE
+		set FILENAME=#fileName#
+		where FILENO=#fileNo#
+	</update> -->
+

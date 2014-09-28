@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Test">
+	<typeAlias alias="test" type="kr.co.eco.vo.TestVO"/>
+	
+	<resultMap id="testResult" class="test">
+		<result property="testNo" column="TESTNO" />
+		<result property="testMakerID" column="TESTMAKERID" />
+		<result property="testName" column="TESTNAME" />
+		<result property="testTime" column="TESTTIME" nullValue="" />
+		<result property="testTotalScore" column="TESTTOTALSCORE"/>
+		<result property="testPoint" column="TESTPOINT"  nullValue="" />
+		<result property="testKind" column="TESTKIND"  nullValue="" />
+		<result property="testExampleCount" column="TESTEXAMPLECOUNT"  nullValue="0" />
+		<result property="testTotalQuestion" column="TESTTOTALQUESTION"  />
+		<result property="testFileName" column="TESTFILENAME"  nullValue="" />
+		<result property="testCreateDate" column="TESTCREATEDATE" />
+	</resultMap>
+
+	<select id ="getTestList" resultMap="testResult">
+		select *
+		from TEST
+		ORDER BY TESTNO
+	</select>
+
+	<select id ="getTestListByMaker" resultMap="testResult" parameterClass="java.util.HashMap">
+		select *
+		from TEST
+		WHERE TESTMAKERID LIKE '%' || #testMakerID# || '%' AND TESTNO LIKE '%' || #key# || '%'
+		ORDER BY TESTNO
+	</select>
+	
+	<select id="getTestListByName" resultMap="testResult" parameterClass="java.util.HashMap">
+		SELECT * 
+		FROM TEST
+		WHERE TESTNAME LIKE '%' || #testName# || '%' AND TESTNO LIKE '%' || #key# || '%'
+		ORDER BY TESTCREATEDATE
+	</select>
+	
+	<select id ="getTestByTestNo" resultMap="testResult" parameterClass="java.lang.String">
+		select *
+		from TEST
+		WHERE TESTNO = #testNo#
+	</select>
+	
+	<select id ="getTestListByKey" resultMap="testResult" parameterClass="java.lang.String">
+		select *
+		from TEST
+		WHERE TESTNO  LIKE '%' || #key# || '%'
+		order by TESTNO
+	</select>
+	
+	<insert id="addTest" parameterClass="test">
+		INSERT INTO TEST(TESTNO,TESTMAKERID,TESTNAME,TESTTIME,TESTTOTALSCORE,TESTPOINT,TESTKIND,TESTEXAMPLECOUNT,TESTTOTALQUESTION,TESTCREATEDATE)
+		VALUES('N'||seq_test.NEXTVAL,#testMakerID#,#testName#,#testTime#,#testTotalScore#,#testPoint#,#testKind#,#testExampleCount#,#testTotalQuestion#,SYSDATE) 
+	</insert>
+
+	<delete id="deleteTest" parameterClass="test">
+		delete TEST where TESTNO=#testNo# and TESTMAKERID=#testMakerID#
+	</delete>
+	
+	<update id="updateTest" parameterClass="test">
+		update TEST 
+		set TESTNAME = #testName#, TESTTIME = #testTime#, TESTTOTALSCORE=#testTotalScore#, TESTPOINT=#testPoint#, TESTKIND=#testKind#,TESTEXAMPLECOUNT=#testExampleCount#,TESTTOTALQUESTION=#testTotalQuestion#,TESTCREATEDATE=#testCreateDate#
+		where TESTNO=#testNo# and TESTMAKERID=#testMakerID#
+	</update>
+	
+	<insert id="addBaseTest" parameterClass="test">
+		INSERT INTO TEST(TESTNO,TESTMAKERID,TESTNAME,TESTTIME,TESTTOTALSCORE,TESTPOINT,TESTKIND,TESTEXAMPLECOUNT,TESTTOTALQUESTION,TESTCREATEDATE, TESTFILENAME)
+		VALUES('E'||seq_test.NEXTVAL,#testMakerID#,#testName#,#testTime#,#testTotalScore#,#testPoint#,#testKind#,#testExampleCount#,#testTotalQuestion#,SYSDATE, #testFileName#) 
+	</insert>
+
+</sqlMap>
+

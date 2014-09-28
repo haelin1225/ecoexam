@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Comments">
+	<typeAlias alias="comments" type="kr.co.eco.vo.CommentsVO"/>
+	
+	<resultMap id="commentsResult" class="comments">
+		<result property="commentsNo" column="COMMENTSNO" />
+		<result property="postNo" column="POSTNO" />
+		<result property="memberID" column="MEMBERID" />
+		<result property="commentsContent" column="COMMENTSCONTENT" nullValue="" />
+		<result property="commentsCreateDate" column="COMMENTSCREATEDATE" nullValue="" />
+	</resultMap>
+
+	<select id ="getComments" resultMap="commentsResult" parameterClass="java.lang.Integer">
+		SELECT * FROM COMMENTS WHERE COMMENTSNO=#commentsNo#
+	</select>
+	
+	<select id ="getCommentsList" resultMap="commentsResult" parameterClass="java.lang.Integer">
+		SELECT * FROM COMMENTS WHERE POSTNO=#postNo#
+	</select>
+	
+	<insert id="addComments" parameterClass="comments">
+		INSERT INTO COMMENTS
+		VALUES(seq_comments.NEXTVAL, #postNo#, #memberID#, #commentsContent#, SYSDATE)
+	</insert>
+
+	<update id="updateComments" parameterClass="comments">
+		UPDATE COMMENTS
+		SET COMMENTSCONTENT=#commentsContent#
+		WHERE COMMENTSNO=#commentsNo#
+	</update>
+	
+	<delete id="deleteComments" parameterClass="java.lang.Integer">
+		DELETE FROM COMMENTS WHERE COMMENTSNO=#commentsNo#
+	</delete>
+</sqlMap>

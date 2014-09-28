@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Grade">
+	<typeAlias alias="grade" type="kr.co.eco.vo.GradeVO"/>
+	
+	<resultMap id="gradeResult" class="grade" >
+		<result property="clubNo" column="CLUBNO" nullValue="" />
+		<result property="memberID" column="MEMBERID" nullValue="" />
+		<result property="testNo" column="TESTNO" nullValue="" />
+		<result property="grade" column="GRADE" nullValue="" />
+	</resultMap>
+	
+	<resultMap id="getGrade" class="grade" >
+		<result property="grade" column="GRADE" nullValue="" />
+	</resultMap>
+
+	<insert id="insertGrade" parameterClass="grade">
+		INSERT INTO GRADE(CLUBNO, MEMBERID, TESTNO, GRADE) VALUES(#clubNo#, #memberID#, #testNo#, #grade#)
+	</insert>
+
+	<select id="getGrade" resultMap="getGrade" parameterClass="java.util.HashMap">
+		SELECT grade
+		FROM GRADE
+		WHERE CLUBNO=#clubNo# AND MEMBERID=#memberID# AND TESTNO=#testNo# 
+	</select>
+	
+	<!-- 일단 list 보류 -->	
+
+	
+</sqlMap>

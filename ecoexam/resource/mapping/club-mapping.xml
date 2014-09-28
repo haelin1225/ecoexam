@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Club">
+	<typeAlias alias="club" type="kr.co.eco.vo.ClubVO"/>
+	
+	<resultMap id="clubResult" class="club" >
+		<result property="clubNo" column="CLUBNO" nullValue="" />
+		<result property="clubName" column="CLUBNAME" nullValue="" />
+		<result property="clubManagerID" column="CLUBMANAGERID" nullValue="" />
+		<result property="clubClearOk" column="CLUBCLEAROK" nullValue="false" />
+		<result property="clubBoardNo" column="CLUBBOARDNO" nullValue="0" />
+		<result property="clubCreateDate" column="CLUBCREATEDATE" nullValue="" />
+	</resultMap>
+
+	<resultMap class="club" id="clubSearch">
+		<result property="clubName" column="CLUBNAME" nullValue="" />
+		<result property="clubManagerID" column="CLUBMANAGERID" nullValue="" />
+		<result property="clubClearOk" column="CLUBCLEAROK" nullValue="" />
+		<result property="clubCreateDate" column="CLUBCREATEDATE" nullValue="" />
+	</resultMap>
+	
+	<resultMap class="club" id="clubList">
+		<result property="clubName" column="CLUBNAME" nullValue="" />
+		<result property="clubCreateDate" column="CLUBCREATEDATE" nullValue="" />
+	</resultMap>
+	
+	<resultMap class="java.lang.String" id="clubNameResult">
+		<result property="clubName" column="CLUBNAME" nullValue="" />
+	</resultMap>
+	
+	<select id="getClubNameList" resultMap="clubNameResult">
+	 select CLUBNAME from club
+	</select>
+	
+	<insert id="insertClub" parameterClass="club">
+		INSERT INTO CLUB(CLUBNO, CLUBNAME, CLUBMANAGERID, CLUBCLEAROK, CLUBBOARDNO, CLUBCREATEDATE) VALUES(seq_club.NEXTVAL, #clubName#, #clubManagerID#, #clubClearOk#, #clubBoardNo#, SYSDATE)
+	</insert>
+
+	<!-- 클럽 이름으로 글럽이름, 클럽완료유무, 클럽생성날짜 (검색시 사용) -->
+
+	
+	<select id="getClub" resultMap="clubResult" parameterClass="java.lang.Integer">
+		SELECT *
+		FROM CLUB
+		WHERE CLUBNo=#clubNo# 
+	</select>
+	
+	<select id="getClubListByClubName" resultMap="clubResult" parameterClass="java.lang.String">
+		SELECT *
+		FROM CLUB
+		WHERE CLUBNAME LIKE '%' || #clubName# ||'%'
+	</select>
+	
+	<select id="clubList" resultMap="clubList" >
+		SELECT CLUBNAME, CLUBCREATEDATE
+		FROM CLUB
+	</select>
+	
+	<delete id="deleteClub" parameterClass="java.lang.Integer">
+		DELETE CLUB
+		WHERE CLUBNO=#clubNo#
+	</delete>
+	
+	<update id="updateClub" parameterClass="club">
+		UPDATE CLUB
+		SET CLUBNAME=#clubName#, CLUBCLEAROK=#clubClearOk#
+		WHERE CLUBMANAGERID=#clubManagerID#
+	</update>
+	
+	<update id="updateClubBoardNo" parameterClass="java.util.HashMap">
+		update club
+		set CLUBBOARDNO = #boardNo#
+		where clubNo = #clubNo#
+	</update>
+</sqlMap>

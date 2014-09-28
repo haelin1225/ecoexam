@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Post">
+	<typeAlias alias="post" type="kr.co.eco.vo.PostVO"/>
+	<typeAlias alias="postNo" type="kr.co.eco.vo.PostNoVO"/>
+	
+	<resultMap id="postResult" class="post">
+		<result property="postNo" column="POSTNO" />
+		<result property="postTitle" column="POSTTITLE" nullValue="" />
+		<result property="memberID" column="MEMBERID" />
+		<result property="postContent" column="POSTCONTENT"/>
+		<result property="postCreateDate" column="POSTCREATEDATE" nullValue="" />
+		<result property="postCount" column="POSTCOUNT" nullValue="" />
+		<result property="boardNo" column="BOARDNO"  />
+	</resultMap>
+	
+	<resultMap id="postNoResult" class="postNo">
+		<result property="postNo" column="postNo"/>
+		<result property="pre_postNo" column="pre_postNo"/>
+		<result property="next_postNo" column="next_postNo"/>
+	</resultMap>
+
+	<select id ="getAllPostList" resultMap="postResult">
+		select *
+		from POST
+		ORDER BY POSTCOUNT DESC
+	</select>
+
+	<select id ="getPostList" resultMap="postResult" parameterClass="java.lang.Integer">
+		select *
+		from POST
+		WHERE BOARDNO = #boardNo#
+		ORDER BY POSTNO
+	</select>
+	
+	<select id ="getPostListByTitle" resultMap="postResult" parameterClass="java.util.HashMap">
+		select * from POST
+		WHERE BOARDNO = #boardNo# AND POSTTITLE LIKE '%' || #postTitle# || '%'
+	</select>
+	
+	<select id ="getPostListByTitleAndContent" resultMap="postResult" parameterClass="java.util.HashMap">
+		select * from POST
+		WHERE BOARDNO = #boardNo# AND ((POSTTITLE LIKE '%' || #postTitle# || '%') OR (POSTCONTENT LIKE '%' || #postContent# || '%'))
+	</select>
+	
+	<select id ="getPostListByContent" resultMap="postResult" parameterClass="java.util.HashMap">
+		select * from POST
+		WHERE BOARDNO = #boardNo# AND POSTCONTENT LIKE '%' || #postContent# || '%'
+	</select>
+	
+	<select id ="getPostListByMemberID" resultMap="postResult" parameterClass="java.util.HashMap">
+		select * from POST
+		WHERE BOARDNO = #boardNo# AND MEMBERID LIKE '%' || #memberID# || '%'
+	</select>
+	
+	<select id ="getPost" resultMap="postResult" parameterClass="java.lang.Integer">
+		select *
+		from POST
+		WHERE POSTNO = #postNo#
+	</select>
+	
+	<select id="getAllPostNo" resultMap="postNoResult">
+		select POSTNO
+				, LAG(POSTNO, 1, 0) OVER (ORDER BY POSTNO) AS pre_postNo
+				, LEAD(POSTNO, 1, 0) OVER (ORDER BY POSTNO) AS next_postNo
+		from POST
+		where BOARDNO=#boardNo#
+		order by POSTNO
+	</select>
+	
+	<update id="addPost" parameterClass="post">
+		INSERT INTO POST(POSTNO,POSTTITLE,MEMBERID,POSTCONTENT,POSTCREATEDATE,BOARDNO)
+		VALUES(seq_post.NEXTVAL,#postTitle#,#memberID#,#postContent#,SYSDATE,#boardNo#) 
+	</update>
+
+	<delete id="deletePost" parameterClass="java.lang.Integer">
+		delete POST where POSTNO=#postNo#
+	</delete>
+	
+	<update id="updatePost" parameterClass="post">
+		update POST 
+		set POSTTITLE = #postTitle#, POSTCONTENT = #postContent#
+		where POSTNO=#postNo#
+	</update>
+		
+	<update id="updatePostCount" parameterClass="post">
+		update POST 
+		set POSTCOUNT = #postCount#
+		where POSTNO=#postNo#
+	</update>
+</sqlMap>
+

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="ClubJoin">
+	<typeAlias alias="clubJoin" type="kr.co.eco.vo.ClubJoinVO"/>
+	<typeAlias alias="clubMember" type="kr.co.eco.vo.ClubMemberVO"/>
+	<resultMap id="clubJoinResult" class="clubJoin">
+		<result property="clubNo" column="CLUBNO" />
+		<result property="memberID" column="MEMBERID" />
+		<result property="clubRole" column="CLUBROLE" nullValue="" />
+		<result property="clubJoinDate" column="CLUBJOINDATE" nullValue="" />
+		<result property="clubAgreeOk" column="CLUBAGREEOK" nullValue="" />
+	</resultMap>
+		<resultMap id="clubMemberResult" class="clubMember">
+		<result property="memberID" column="MEMBERID" nullValue=""/>
+		<result property="memberEmail" column="MEMBEREMAIL" nullValue="" />
+		<result property="clubJoinDate" column="CLUBJOINDATE" nullValue="" />
+		<result property="clubAgreeOk" column="CLUBAGREEOK" nullValue="" />
+	</resultMap>
+	<select id="getClubJoinList" resultMap="clubMemberResult" parameterClass="java.lang.Integer">			
+		select MEMBERID, MEMBEREMAIL,CLUBJOINDATE,CLUBAGREEOK  
+		from member  natural join clubJoin 
+		where CLUBNO=#clubNo#
+		order by CLUBJOINDATE
+	</select>
+
+	<select id ="getClubMember" resultMap="clubJoinResult" parameterClass="java.util.HashMap">
+		SELECT * FROM CLUBJOIN WHERE CLUBNO=#clubNo# AND MEMBERID=#memberID#
+	</select>
+	
+	<select id="getClubMemberList" resultMap="clubJoinResult" parameterClass="java.lang.Integer">
+		SELECT * FROM CLUBJOIN WHERE CLUBNO=#clubNo#
+	</select>
+	
+	<insert id="addClubMember" parameterClass="clubJoin">
+		INSERT INTO CLUBJOIN(CLUBNO, MEMBERID, CLUBJOINDATE)
+		VALUES(#clubNo#, #memberID#, SYSDATE)
+	</insert>
+
+	<insert id="addClubJoinManager" parameterClass="clubJoin">
+		INSERT INTO CLUBJOIN(CLUBNO, MEMBERID, CLUBROLE, CLUBJOINDATE, CLUBAGREEOK)
+		VALUES(#clubNo#, #memberID#, #clubRole#, SYSDATE, #clubAgreeOk#)
+	</insert>
+	
+	<update id="updateClubMemberByClubRole" parameterClass="clubJoin">
+		UPDATE CLUBJOIN
+		SET CLUBROLE=#clubRole#
+		WHERE CLUBNO=#clubNo# AND MEMBERID=#memberID#
+	</update>
+	
+	<update id="updateClubMemberByClubAgreeOk" parameterClass="clubJoin">
+		UPDATE CLUBJOIN
+		SET CLUBAGREEOK=#clubAgreeOk#
+		WHERE CLUBNO=#clubNo# AND MEMBERID=#memberID#
+	</update>
+
+	
+	<delete id="deleteClubMember" parameterClass="java.util.HashMap">
+		DELETE FROM CLUBJOIN WHERE CLUBNO=#clubNo# AND MEMBERID=#memberID#
+	</delete>
+</sqlMap>

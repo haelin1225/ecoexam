@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="CorrectAnswer">
+	<typeAlias alias="correctAnswer" type="kr.co.eco.vo.CorrectAnswerVO"/>
+	
+	<resultMap id="correctAnswerResult" class="correctAnswer">
+		<result property="testNo" column="TESTNO" />
+		<result property="questionNo" column="QUESTIONNO" />
+		<result property="correctAnswer" column="CORRECTANSWER" />
+		<result property="questionPoint" column="QUESTIONPOINT" />
+	</resultMap>
+
+	<resultMap id="sumResult" class="java.lang.Integer">
+		<result property="sum" column="sum" nullValue="0"/>
+	</resultMap>
+	
+	<select id ="getCorrectAnswer" resultMap="correctAnswerResult" parameterClass="java.util.HashMap">
+		SELECT * FROM CORRECTANSWER WHERE TESTNO=#testNo# AND QUESTIONNO=#questionNo#
+	</select>
+	
+	<select id ="getCorrectAnswerList" resultMap="correctAnswerResult" parameterClass="java.lang.String">
+		SELECT * FROM CORRECTANSWER WHERE TESTNO=#testNo#
+	</select>
+	
+	<insert id="addCorrectAnswer" parameterClass="correctAnswer">
+		INSERT INTO CORRECTANSWER
+		VALUES(#testNo#, #questionNo#, #correctAnswer#, #questionPoint#)
+	</insert>
+
+	<update id="updateCorrectAnswer" parameterClass="correctAnswer">
+		UPDATE CORRECTANSWER
+		SET CORRECTANSWER=#correctAnswer#, QUESTIONPOINT=#questionPoint#
+		WHERE TESTNO=#testNo# AND QUESTIONNO=#questionNo#
+	</update>
+	
+	<delete id="deleteCorrectAnswer" parameterClass="java.lang.String">
+		DELETE CORRECTANSWER WHERE TESTNO=#testNo#
+	</delete>
+	
+	<select id="sumQuestionPoint" resultMap="sumResult" parameterClass="java.lang.String">
+		select sum(QUESTIONPOINT) sum from CORRECTANSWER where TESTNO=#testNo#
+	</select>
+</sqlMap>

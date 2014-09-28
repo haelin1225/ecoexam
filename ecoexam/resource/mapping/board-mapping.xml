@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Board">
+<typeAlias alias="board" type="kr.co.eco.vo.BoardVO"/>
+<resultMap id="boardResult" class="board">
+		<result property="boardNo" column="BOARDNO" nullValue=""/>
+		<result property="boardName" column="BOARDNAME" nullValue=""/>
+</resultMap>
+<resultMap id="boardList" class="board">
+		<result property="boardName" column="BOARDNAME" nullValue=""/>
+</resultMap>
+<resultMap id="boardNo" class="board">
+		<result property="boardNo" column="BOARDNO" nullValue=""/>
+</resultMap>
+	
+<insert id="insertBoard" parameterClass="board">
+		insert into BOARD
+		values(seq_board.NEXTVAL,#boardName#)
+</insert>
+
+<delete id="deleteBoard" parameterClass="java.lang.Integer">
+		delete BOARD
+		where BOARDNO=#boardNo#
+</delete>
+
+<update id="updateBoard" parameterClass="board">
+	UPDATE BOARD
+	SET BOARDNAME=#boardName#
+	WHERE BOARDNO=#boardNo#
+</update>
+
+
+<select id="boardList" resultMap="boardList" >
+		SELECT BOARDNAME
+		FROM BOARD
+</select>
+
+<select id="getBoardByBoardName" resultMap="boardResult" parameterClass="java.lang.String" >
+		SELECT *
+		FROM BOARD
+		WHERE BOARDNAME=#boardName#
+</select>
+
+<!-- 	<resultMap id="memberResult" class="member">
+		<result property=boardNo column="MEMBERID" nullValue=""/>
+		<result property="boardName" column="MEMBERPW" nullValue=""/>
+		
+	</resultMap> -->
+</sqlMap>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Example">
+	<typeAlias alias="example" type="kr.co.eco.vo.ExampleVO"/>
+	
+	<resultMap id="exampleResult" class="example">
+		<result property="testNo" column="TESTNO" />
+		<result property="questionNo" column="QUESTIONNO" />
+		<result property="exampleNo" column="EXAMPLENO" />
+		<result property="exampleContent" column="EXAMPLECONTENT" />
+	</resultMap>
+
+	<select id ="getExample" resultMap="exampleResult" parameterClass="java.util.HashMap">
+		SELECT * FROM EXAMPLE WHERE TESTNO=#testNo# AND QUESTIONNO=#questionNo# AND EXAMPLENO=#exampleNo#
+	</select>
+	
+	<select id ="getExampleList" resultMap="exampleResult" parameterClass="java.util.HashMap">
+		SELECT * FROM EXAMPLE WHERE TESTNO=#testNo# AND QUESTIONNO=#questionNo# order by EXAMPLENO
+	</select>
+	
+	<insert id="addExample" parameterClass="example">
+		INSERT INTO EXAMPLE
+		VALUES(#testNo#, #questionNo#, #exampleNo#, #exampleContent#)
+	</insert>
+
+	<update id="updateExample" parameterClass="example">
+		UPDATE EXAMPLE
+		SET EXAMPLECONTENT=#exampleContent#
+		WHERE TESTNO=#testNo# AND QUESTIONNO=#questionNo# AND EXAMPLENO=#exampleNo#
+	</update>
+
+	<delete id="deleteExample" parameterClass="java.util.HashMap">
+		delete from EXAMPLE where TESTNO=#testNo# and QUESTIONNO=#questionNo#
+	</delete>
+</sqlMap>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Question">
+	<typeAlias alias="question" type="kr.co.eco.vo.QuestionVO"/>
+	
+	<resultMap id="questionResult" class="question" >
+		<result property="testNo" column="TESTNO" nullValue="" />
+		<result property="questionNo" column="QUESTIONNO" nullValue="" />
+		<result property="question" column="QUESTION" nullValue="" />
+		<result property="questionContent" column="QUESTIONCONTENT" nullValue="" />
+		<result property="questionKind" column="QUESTIONKIND" nullValue="" />
+	</resultMap>
+	<resultMap id="count" class="java.lang.Integer">
+		<result property="count" column="count" nullValue=""/>
+	</resultMap>
+	
+	<resultMap id="questionList" class="question" >
+		<result property="question" column="QUESTION" nullValue="" />
+		<result property="questionContent" column="QUESTIONCONTENT" nullValue="" />
+	</resultMap>
+
+	<insert id="insertQuestion" parameterClass="question">
+		INSERT INTO Question(TESTNO, QUESTIONNO, QUESTION, QUESTIONCONTENT, QUESTIONKIND) VALUES(#testNo#, #questionNo#, #question#, #questionContent#, #questionKind#)
+	</insert>
+	
+	<update id="updateQuestion" parameterClass="question">
+		UPDATE QUESTION
+		SET QUESTION=#question#, QUESTIONCONTENT=#questionContent#, QUESTIONKIND=#questionKind#
+		WHERE QUESTIONNO=#questionNo# AND TESTNO=#testNo# 
+	</update>
+	
+	<delete id="deleteQuestion" parameterClass="java.util.HashMap">
+		DELETE QUESTION
+		WHERE QUESTIONNO=#questionNo# AND TESTNO=#testNo#
+	</delete>
+	
+	<select id="questionList" resultMap="questionList" parameterClass="java.lang.String">
+		SELECT QUESTION, QUESTIONCONTENT
+		FROM QUESTION
+		WHERE TESTNO=#testNo#
+	</select>
+	
+	<select id="countQuestion" resultMap="count" parameterClass="java.lang.String">
+		select count(*) count from question where TESTNO = #testNo#
+	</select>
+
+	<select id="getQuestion" resultMap="questionResult" parameterClass="java.util.HashMap">
+		select *
+		from question
+		where TESTNO = #testNo# and QUESTIONNO=#questionNo#
+	</select>
+
+	
+	
+</sqlMap>

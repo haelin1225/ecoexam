@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MemberAnswer">
+	<typeAlias alias="memberAnswer" type="kr.co.eco.vo.MemberAnswerVO"/>
+	
+	<resultMap id="memberAnswerResult" class="memberAnswer" >
+		<result property="testNo" column="TESTNO" nullValue="" />
+		<result property="memberID" column="MEMBERID" nullValue="" />
+		<result property="questionNo" column="QUESTIONNO" nullValue="" />
+		<result property="memberAnswer" column="MEMBERANSWER" nullValue="" />
+	</resultMap>
+
+	<resultMap class="memberAnswer" id="memberAnswerGet">
+		<result property="memberAnswer" column="MEMBERANSWER" nullValue="" />
+	</resultMap>
+
+	<insert id="insertMemberAnswer" parameterClass="memberAnswer">
+		INSERT INTO MEMBERANSWER(TESTNO, MEMBERID, QUESTIONNO, MEMBERANSWER) VALUES(#testNo#, #memberID#, #questionNo#, #memberAnswer#)
+	</insert>
+	
+	<delete id="deleteMemberAnswer" parameterClass="java.util.HashMap">
+		DELETE MEMBERANSWER
+		WHERE MEMBERID=#memberID# AND TESTNO=#testNo#
+	</delete>
+
+	<select id="memberAnswerList" resultMap="memberAnswerGet" parameterClass="java.util.HashMap">
+		SELECT MEMBERANSWER
+		FROM MEMBERANSWER
+		WHERE MEMBERID=#memberID# AND TESTNO=#testNo#
+	</select>
+	
+	
+</sqlMap>

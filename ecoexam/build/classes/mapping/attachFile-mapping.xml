@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="AttachFile">
+	<typeAlias alias="attachFile" type="kr.co.eco.vo.AttachFileVO"/>
+	
+	<resultMap id="attachFileResult" class="attachFile">
+		<result property="fileNo" column="FILENO" />
+		<result property="postNo" column="POSTNO"/>
+		<result property="fileName" column="FILENAME" nullValue=""/>
+	</resultMap>
+
+	<select id ="getAttachFileList" resultMap="attachFileResult" parameterClass="java.lang.Integer">
+		select *
+		from ATTACHFILE
+		WHERE POSTNO = #postNo#
+	</select>
+	
+	<select id ="getAttachFile" resultMap="attachFileResult" parameterClass="java.lang.Integer">
+		select *
+		from ATTACHFILE
+		WHERE FILENO = #fileNo#
+	</select>
+	
+	<update id="addAttachFile" parameterClass="attachFile">
+		INSERT INTO ATTACHFILE(FILENO,POSTNO,FILENAME)
+		VALUES(seq_file.NEXTVAL,#postNo#,#fileName#) 
+	</update>
+
+	<delete id="deleteAttachFile" parameterClass="java.lang.Integer">
+		delete ATTACHFILE where FILENO=#fileNo#
+	</delete>
+	
+	<update id="updateAttachFile" parameterClass="attachFile">
+		update ATTACHFILE
+		set FILENAME=#fileName#
+		where FILENO=#fileNo#
+	</update>
+</sqlMap>
+
